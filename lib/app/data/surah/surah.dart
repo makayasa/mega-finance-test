@@ -1,3 +1,9 @@
+import 'package:skeleton/config/function_utils.dart';
+
+import 'audio_full.dart';
+import 'ayat.dart';
+import 'tafsir.dart';
+
 class Surah {
   Surah({
     required this.nomor,
@@ -7,7 +13,10 @@ class Surah {
     required this.tempatTurun,
     required this.arti,
     required this.deskripsi,
+    // this.audio = '',
     required this.audioFull,
+    this.ayat,
+    this.tafsir,
   });
   int nomor;
   String nama;
@@ -16,7 +25,10 @@ class Surah {
   String tempatTurun;
   String arti;
   String deskripsi;
+  // String? audio;
   AudioFull audioFull;
+  List<Ayat>? ayat;
+  List<Tafsir>? tafsir;
 
   Surah.empty()
       : nomor = 0,
@@ -26,7 +38,10 @@ class Surah {
         tempatTurun = '',
         arti = '',
         deskripsi = '',
-        audioFull = AudioFull.empty();
+        // audio = '',
+        audioFull = AudioFull.empty(),
+        ayat = [],
+        tafsir = [];
 
   factory Surah.fromJson(Map<String, dynamic> json) => Surah(
         nomor: json['nomor'],
@@ -36,7 +51,10 @@ class Surah {
         tempatTurun: json['tempatTurun'],
         arti: json['arti'],
         deskripsi: json['deskripsi'],
-        audioFull: AudioFull.fromJson(json['audioFull']),
+        // audio: json['audio'] ?? '',
+        audioFull: isNotEmpty(json['audioFull']) ? AudioFull.fromJson(json['audioFull']) : AudioFull.empty(),
+        ayat: isNotEmpty(json['ayat']) ? List<Ayat>.from(json['ayat'].map((e) => Ayat.fromJson(e))) : <Ayat>[],
+        tafsir: isNotEmpty(json['tafsir']) ? List<Tafsir>.from(json['tafsir'].map((e) => Tafsir.fromJson(e))) : <Tafsir>[],
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,43 +66,7 @@ class Surah {
         "arti": arti,
         "deskripsi": deskripsi,
         "audioFull": audioFull.toJson(),
-      };
-}
-
-class AudioFull {
-  AudioFull({
-    required this.satu,
-    required this.dua,
-    required this.tiga,
-    required this.empat,
-    required this.lima,
-  });
-  String satu;
-  String dua;
-  String tiga;
-  String empat;
-  String lima;
-
-  AudioFull.empty()
-      : satu = '',
-        dua = '',
-        tiga = '',
-        empat = '',
-        lima = '';
-
-  factory AudioFull.fromJson(Map<String, dynamic> json) => AudioFull(
-        satu: json['01'],
-        dua: json['02'],
-        tiga: json['03'],
-        empat: json['04'],
-        lima: json['05'],
-      );
-
-  Map<String, dynamic> toJson() => {
-        '01': satu,
-        '02': dua,
-        '03': tiga,
-        '04': empat,
-        '05': lima,
+        "ayat": List.from(ayat!.map((e) => e.toJson())),
+        'tafsir': List.from(tafsir!.map((e) => e.toJson())),
       };
 }
