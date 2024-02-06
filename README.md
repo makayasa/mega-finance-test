@@ -1,8 +1,6 @@
-# skeleton
-
-Skeleton for new Flutter Project
-
 ## Getting Started
+
+For the flutter version, checkout on .fvm
 
 To rename the project and company name use rename package
 [read here](https://pub.dev/packages/rename)
