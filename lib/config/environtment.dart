@@ -1,0 +1,1 @@
+const baseurl = 'https://equran.id/api/v2';

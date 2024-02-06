@@ -1,12 +1,34 @@
+import 'package:dio/dio.dart' as dio;
 import 'package:get/get.dart';
+import 'package:skeleton/app/controllers/network_controller.dart';
+import 'package:skeleton/app/data/surah.dart';
+import 'package:skeleton/config/environtment.dart';
+import 'package:skeleton/config/function_utils.dart';
 
 class HomeController extends GetxController {
-  //TODO: Implement HomeController
+  final network = Get.find<NetworkController>();
 
-  final count = 0.obs;
+  final listSurah = <Surah>[].obs;
+
+  Future<void> getSurah() async {
+    try {
+      final dio.Response res = await network.get(
+        '$baseurl/surat',
+      );
+      for (var e in res.data['data']) {
+        final surah = Surah.fromJson(e);
+        listSurah.add(surah);
+      }
+      logKey('res getSurah', res.data);
+    } on dio.DioException catch (e) {
+      logKey('error getSurah', e.response);
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
+    getSurah();
   }
 
   @override
@@ -18,6 +40,4 @@ class HomeController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }
